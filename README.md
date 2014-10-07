@@ -27,12 +27,17 @@ It is a deployable solution with Docker or any existing web server with WSGI sup
 **Diagram**:
 ![yum-nginx-api Diagram][7]
 
-## How to Install yum-nginx-api (Docker) <a name="install"></a>
+
+## Pull Docker image from the Docker Registry <a name="install"></a>
+    docker pull finraos/yum-nginx-api
+    docker run -d -p 80:80 finraos/yum-nginx-api
+
+## How to build yum-nginx-api (Docker)
 
     git clone https://github.com/FINRAOS/yum-nginx-api.git
-    cd yum-nginx-api && docker build -t finra/yumapi .
-    docker run -d -p 80:80 finra/yumapi
-    sleep 10 && docker logs `docker ps | grep yumapi | awk '{ print $1 }' | head -n1` 
+    cd yum-nginx-api && docker build -t finraos/yum-nginx-api .
+    docker run -d -p 80:80 finraos/yum-nginx-api
+    sleep 10 && docker logs `docker ps | grep 'yum-nginx-api' | awk '{ print $1 }' | head -n1` 
 
 ## How to Install yum-nginx-api (Non-Docker)
 

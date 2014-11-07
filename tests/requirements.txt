@@ -1,0 +1,2 @@
+locustio==0.7.2
+requests==2.4.3

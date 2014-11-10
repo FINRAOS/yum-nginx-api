@@ -16,12 +16,14 @@ from flask import Flask, request, jsonify
 from werkzeug.utils import secure_filename
 from werkzeug.contrib.fixers import ProxyFix
 from subprocess import call
+import configuration as config
+import repotojson
 
-upload_dir    = '/opt/repos/pre-release'
+upload_dir    = 'config.upload_dir'
 allowed_ext   = set(['rpm'])
 allowed_mime  = set(['application/x-rpm'])
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='', static_url_path='')
 app.config['upload_dir'] = upload_dir
 #900MB limit set below
 app.config['MAX_CONTENT_LENGTH'] = 90 * 1024 * 1024 * 1024
@@ -32,7 +34,7 @@ def allowed_file(filename):
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return jsonify(message='Invaild URL, did you mean /api/upload', status=404), 404
+    return jsonify(message='Invaild URL, did you mean /api/upload or /api/repo', status=404), 404
 
 @app.errorhandler(405)
 def method_not_allowed(e):
@@ -55,6 +57,11 @@ def upload_file():
 	  return jsonify(name=filename, size_mb=filesize, mime=file_mime, status=415)
     else:
        return jsonify(name=filename, status=415)
+
+@app.route('/api/repo')
+def list_repo():
+    repotojson.main()
+    return app.send_static_file('repo.json')
 
 app.wsgi_app = ProxyFix(app.wsgi_app)
 

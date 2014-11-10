@@ -79,6 +79,10 @@ It is a deployable solution with Docker or any existing web server with WSGI sup
 
 **List repo contents package name, arch, version and summary:**
 
+    curl http://localhost/api/repo
+
+**Successful post:**
+
     {
       "ami-buildr": {
         "arch": [

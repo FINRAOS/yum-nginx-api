@@ -79,23 +79,23 @@ It is a deployable solution with Docker or any existing web server with WSGI sup
 
 **List repo contents package name, arch, version and summary:**
 
-   {
-     "ami-buildr": {
-       "arch": [
-        "x86_64",
-        "i686"
-       ],
-       "summary": "AMI Buildr for RHEL 6",
-       "version": "2.0"
-     },
-     "epel-release": {
-       "arch": [
-        "noarch"
-       ],
-       "summary": "Extra Packages for Enterprise Linux repository configuration",
-       "version": "6"
-     }
-   }
+    {
+      "ami-buildr": {
+        "arch": [
+         "x86_64",
+         "i686"
+        ],
+        "summary": "AMI Buildr for RHEL 6",
+        "version": "2.0"
+      },
+      "epel-release": {
+        "arch": [
+         "noarch"
+        ],
+        "summary": "Extra Packages for Enterprise Linux repository configuration",
+        "version": "6"
+      }
+    }
   
 ## Contributing & Sponsor
 

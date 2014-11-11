@@ -77,7 +77,43 @@ It is a deployable solution with Docker or any existing web server with WSGI sup
       "status": 415
     }
 
-  
+**List repo contents package name, arch, version and summary:**
+
+    curl http://localhost/api/repo
+
+**Successful post:**
+
+    {
+      "ami-buildr": {
+        "arch": [
+         "x86_64",
+         "i686"
+        ],
+        "summary": "AMI Buildr for RHEL 6",
+        "version": "2.0"
+      },
+      "epel-release": {
+        "arch": [
+         "noarch"
+        ],
+        "summary": "Extra Packages for Enterprise Linux repository configuration",
+        "version": "6"
+      }
+    }
+ 
+**Health check API endpoint**
+ 
+    curl http://localhost/api/health
+
+**Successful post:**
+
+    {
+      "hostname": "localhost.localdomain",
+      "results": [],
+      "status": "200",
+      "timestamp": 1415729952.407181
+    }
+
 ## Contributing & Sponsor
 
 More information on how to contribute to this project including sign off and the [DCO agreement](https://github.com/FINRAOS/yum-nginx-api/blob/master/DCO.md), please see the project's [GitHub wiki](https://github.com/FINRAOS/yum-nginx-api/wiki) for more information.

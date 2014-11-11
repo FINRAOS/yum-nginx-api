@@ -39,7 +39,7 @@ def allowed_file(filename):
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return jsonify(message='Invaild URL, did you mean /api/upload or /api/repo', status=404), 404
+    return jsonify(message='Invaild URL, did you mean /api/upload, /api/repo or /api/health', status=404), 404
 
 @app.errorhandler(405)
 def method_not_allowed(e):

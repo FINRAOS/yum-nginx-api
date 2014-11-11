@@ -16,7 +16,7 @@ def basic_exception_handler(checker, e):
 def json_success_handler(results):
     data = {
         'hostname': socket.gethostname(),
-        'status': 'success',
+        'status': '200',
         'timestamp': time.time(),
         'results': results,
     }
@@ -27,7 +27,7 @@ def json_success_handler(results):
 def json_failed_handler(results):
     data = {
         'hostname': socket.gethostname(),
-        'status': 'failure',
+        'status': '200',
         'timestamp': time.time(),
         'results': results,
     }

@@ -100,7 +100,20 @@ It is a deployable solution with Docker or any existing web server with WSGI sup
         "version": "6"
       }
     }
-  
+ 
+**Health check API endpoint**
+ 
+    curl http://localhost/api/healthcheck
+
+**Successful post:**
+
+    {
+      "hostname": "localhost.localdomain",
+      "results": [],
+      "status": "success",
+      "timestamp": 1415729952.407181
+    }
+
 ## Contributing & Sponsor
 
 More information on how to contribute to this project including sign off and the [DCO agreement](https://github.com/FINRAOS/yum-nginx-api/blob/master/DCO.md), please see the project's [GitHub wiki](https://github.com/FINRAOS/yum-nginx-api/wiki) for more information.

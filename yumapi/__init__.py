@@ -12,16 +12,21 @@
 
 import os
 import magic
+import configuration as config
+import repotojson
+from healthcheck import HealthCheck
+from subprocess import call
 from flask import Flask, request, jsonify
 from werkzeug.utils import secure_filename
 from werkzeug.contrib.fixers import ProxyFix
-from subprocess import call
-import configuration as config
-import repotojson
 
 upload_dir    = 'config.upload_dir'
 allowed_ext   = set(['rpm'])
 allowed_mime  = set(['application/x-rpm'])
+
+if os.path.isdir(upload_dir) == False:
+    print upload_dir, "doesn't exist, please create directory set directory in configurations.py"
+    exit()
 
 app = Flask(__name__, static_folder='', static_url_path='')
 app.config['upload_dir'] = upload_dir
@@ -62,6 +67,8 @@ def upload_file():
 def list_repo():
     repotojson.main()
     return app.send_static_file('repo.json')
+
+health = HealthCheck(app, "/api/health")
 
 app.wsgi_app = ProxyFix(app.wsgi_app)
 

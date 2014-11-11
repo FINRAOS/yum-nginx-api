@@ -103,14 +103,14 @@ It is a deployable solution with Docker or any existing web server with WSGI sup
  
 **Health check API endpoint**
  
-    curl http://localhost/api/healthcheck
+    curl http://localhost/api/health
 
 **Successful post:**
 
     {
       "hostname": "localhost.localdomain",
       "results": [],
-      "status": "success",
+      "status": "200",
       "timestamp": 1415729952.407181
     }
 

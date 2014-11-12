@@ -54,7 +54,7 @@ def upload_file():
        file2 = upload_dir + '/' + filename
        file_mime = magic.from_file(file2, mime=True)
        filesize = os.path.getsize(file2) >> 20
-       if file_mime in allowed_mime:
+       if file_mime in allowed_mime and os.path.getsize(file2) >= 1870:
           call(["createrepo", "-v", "-p", "--update", "--workers", "2", upload_dir])
 	  return jsonify(name=filename, size_mb=filesize, mime=file_mime, status=202)
        else:

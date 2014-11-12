@@ -35,3 +35,17 @@ if requests.get(posturl).status_code == 404:
   print "SAT: 400 message recieved"
 else:
   print "UNSAT: 400 message"
+
+''' Verify repo list '''
+posturl = 'http://%s/api/repo' % baseurl
+if requests.get(posturl).status_code == 200:
+  print "SAT: repo list worked"
+else:
+  print "UNSAT: repo list didn't work"
+
+''' Verify health check message '''
+posturl = 'http://%s/api/health' % baseurl
+if requests.get(posturl).status_code == 200:
+  print "SAT: health check worked"
+else:
+  print "UNSAT: health check didn't work"

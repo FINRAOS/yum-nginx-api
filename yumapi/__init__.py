@@ -20,7 +20,7 @@ from flask import Flask, request, jsonify
 from werkzeug.utils import secure_filename
 from werkzeug.contrib.fixers import ProxyFix
 
-upload_dir    = 'config.upload_dir'
+upload_dir    = config.upload_dir
 allowed_ext   = set(['rpm'])
 allowed_mime  = set(['application/x-rpm'])
 

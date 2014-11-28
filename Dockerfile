@@ -1,4 +1,4 @@
-FROM fedora:latest
+FROM fedora:20
 MAINTAINER Tim Marcinowski <marshyski@gmail.com>
 
 USER root

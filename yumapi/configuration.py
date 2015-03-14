@@ -1,1 +1,1 @@
-upload_dir = ''
+upload_dir = '/opt/repos/dev'

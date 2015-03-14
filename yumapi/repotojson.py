@@ -21,9 +21,9 @@ import tempfile
 from sqlalchemy import Column, ForeignKey, Integer, Text, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-import configuration as config
+from configuration import upload_dir
 
-repo_dir = config.upload_dir
+upload_dir = upload_dir
 
 BASE = declarative_base()
 
@@ -93,7 +93,7 @@ def get_pkg_info(session, pkg_name):
 def main():
     working_dir = tempfile.mkdtemp(prefix='repotojson-')
     output = {}
-    dbfiles = find_primary_sqlite(repo_dir)
+    dbfiles = find_primary_sqlite(upload_dir)
     for dbfile_xz in dbfiles:
         cur_fold = os.path.join(*dbfile_xz.rsplit(os.sep, 2)[:-2])
         dbfile = os.path.join(working_dir, 'primary_db_.sqlite')

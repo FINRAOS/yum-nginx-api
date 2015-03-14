@@ -15,13 +15,10 @@ import socket
 import sys
 import time
 import traceback
-
 from flask import request
-
 
 def basic_exception_handler(checker, e):
     return False, str(e)
-
 
 def json_success_handler(results):
     data = {
@@ -30,9 +27,7 @@ def json_success_handler(results):
         'timestamp': time.time(),
         'results': results,
     }
-
     return json.dumps(data, sort_keys=True, indent=2, separators=(',', ': '))
-
 
 def json_failed_handler(results):
     data = {
@@ -41,12 +36,9 @@ def json_failed_handler(results):
         'timestamp': time.time(),
         'results': results,
     }
-
     return json.dumps(data, sort_keys=True, indent=2, separators=(',', ': '))
 
-
 class HealthCheck(object):
-
     def __init__(self, app=None, path=None, success_status=200,
                  success_headers=None, success_handler=json_success_handler,
                  success_ttl=27, failed_status=500, failed_headers=None,
@@ -57,19 +49,15 @@ class HealthCheck(object):
         self.app = app
         self.path = path
         self.cache = dict()
-
         self.success_status = success_status
         self.success_headers = success_headers or {'Content-Type': 'application/json'}
         self.success_handler = success_handler
         self.success_ttl = float(success_ttl or 0)
-
         self.failed_status = failed_status
         self.failed_headers = failed_headers or {'Content-Type': 'application/json'}
         self.failed_handler = failed_handler
         self.failed_ttl = float(failed_ttl or 0)
-
         self.exception_handler = exception_handler
-
         self.options = options
         self.checkers = checkers or []
 

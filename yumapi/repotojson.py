@@ -1,4 +1,3 @@
-#!/usr/bin/python
 #  (C) Copyright 2014 yum-nginx-api Contributors.
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -22,8 +21,6 @@ from sqlalchemy import Column, ForeignKey, Integer, Text, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from configuration import upload_dir
-
-upload_dir = upload_dir
 
 BASE = declarative_base()
 

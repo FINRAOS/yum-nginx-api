@@ -26,7 +26,7 @@ config_file = os.getcwd() + '/yumapi/config.yaml'
 config_yaml = yaml.load(file(config_file, 'r'))
 upload_dir = config_yaml['upload_dir']
 
-''' Verify upload directory is set in configuration.py '''
+"""Verify upload directory is set in config.yaml"""
 if os.path.isdir(upload_dir) == False:
     print upload_dir, "doesn't exist, please create directory set directory in configurations.py"
     exit()
@@ -53,7 +53,7 @@ else:
 
 app = Flask(__name__, static_folder='', static_url_path='')
 app.config['upload_dir'] = upload_dir
-#900MB limit set below
+"""900MB default limit set below"""
 app.config['MAX_CONTENT_LENGTH'] = max_content_length
 
 limiter = Limiter(app)
@@ -82,10 +82,10 @@ def upload_file():
       filesize = os.path.getsize(file2) >> 20
       if file_mime in allowed_mime and os.path.getsize(file2) >= 1870:
          call(["createrepo", "-v", "-p", "--update", "--workers", createrepo_workers, upload_dir])
-	     return jsonify(name=filename, size_mb=filesize, mime=file_mime, status=202)
+	 return jsonify(name=filename, size_mb=filesize, mime=file_mime, status=202)
       else:
-	     os.remove(file2)
-	     abort(415)
+	 os.remove(file2)
+	 abort(415)
    else:
       abort(415)
 

@@ -11,10 +11,9 @@
 
 from datetime import datetime, timedelta
 from psutil import cpu_percent, process_iter
-from configuration import upload_dir
-from healthcheck import HealthCheck
 from subprocess import call
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, abort
+from flask_limiter import Limiter
 from werkzeug.utils import secure_filename
 from werkzeug.contrib.fixers import ProxyFix
 import os
@@ -82,17 +81,18 @@ def upload_file():
       filesize = os.path.getsize(file2) >> 20
       if file_mime in allowed_mime and os.path.getsize(file2) >= 1870:
          call(["createrepo", "-v", "-p", "--update", "--workers", createrepo_workers, upload_dir])
-	 return jsonify(name=filename, size_mb=filesize, mime=file_mime, status=202)
+	     return jsonify(name=filename, size_mb=filesize, mime=file_mime, status=202)
       else:
-	 os.remove(file2)
-	 return jsonify(name=filename, size_mb=filesize, mime=file_mime, status=415)
+	    os.remove(file2)
+	    abort(415)
    else:
-      return jsonify(name=filename, status=415)
+       abort(415)
+       
 
 @app.route('/api/repo')
 @limiter.limit(request_limit)
 def list_repo():
-   """Return json response from sqlite database yum has""""
+   """Return json response from sqlite database yum has"""
    os.remove('repo.json')
    repotojson.main()
    return app.send_static_file('repo.json')

@@ -1,7 +1,7 @@
 #  (C) Copyright 2014 yum-nginx-api Contributors.
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
-#  You may obtain a copy of the License at 
+#  You may obtain a copy of the License at
 #  http://www.apache.org/licenses/LICENSE-2.0
 #  Unless required by applicable law or agreed to in writing, software
 #  distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,10 +17,14 @@ import os
 import shutil
 import sys
 import tempfile
+import yaml
 from sqlalchemy import Column, ForeignKey, Integer, Text, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from configuration import upload_dir
+
+config_file = os.getcwd() + '/yumapi/config.yaml'
+config_yaml = yaml.load(file(config_file, 'r'))
+upload_dir = config_yaml['upload_dir']
 
 BASE = declarative_base()
 

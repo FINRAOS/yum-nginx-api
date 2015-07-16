@@ -129,9 +129,9 @@ It is a deployable solution with Docker or any existing web server with WSGI sup
 
 More information on how to contribute to this project including sign off and the [DCO agreement](https://github.com/FINRAOS/yum-nginx-api/blob/master/DCO.md), please see the project's [GitHub wiki](https://github.com/FINRAOS/yum-nginx-api/wiki) for more information.
 
-FINRA has graciously allocated time for their internal development resources to enhance yum-nginx-api and encourages participation in the open source community. Want to join FINRA? Please visit https://finra.org/careers.
+FINRA has graciously allocated time for their internal development resources to enhance yum-nginx-api and encourages participation in the open source community. Want to join FINRA? Please visit [http://technology.finra.org/careers.html](http://technology.finra.org/careers.html).
 
-[![FINRA Logo][7]](https://finra.org)
+[FINRA Technology](http://technology.finra.org/)
 
 
 ## License Type

@@ -14,7 +14,7 @@ NAME=yumapi
 USER=root
 GROUP=root
 WORKERS=2
-DEPLOY_DIR=/opt
+DEPLOY_DIR=/opt/yum-nginx-api
 
 if [[ $1 = "" ]]; then
    LISTEN_ADDR=127.0.0.1

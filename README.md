@@ -24,9 +24,6 @@ It is a deployable solution with Docker or any existing web server with WSGI sup
  5.  [Python Supervisor][5] (Optional)
  6.  [Docker][6] (Optional) 
 
-**Diagram**:
-![yum-nginx-api Diagram][7]
-
 
 ## Pull Docker image from the Docker Registry <a name="install"></a>
     docker pull finraos/yum-nginx-api
@@ -53,6 +50,22 @@ It is a deployable solution with Docker or any existing web server with WSGI sup
     cp -rf nginx/* /etc/nginx/
     supervisord -n -c /etc/supervisord.conf nohup &
 
+## Configuration File `config.yaml`
+
+    # createrepo workers, default is 2
+    createrepo_workers:
+    # max content upload, default is 900MB 90 * 1024 * 1024 * 1024
+    max_content_length:
+    # API rate limit, default is 1 per second
+    request_limit:
+    # yum repo directory
+    upload_dir:
+
+## Gunicorn Script `yumapi.sh`
+
+    # Path to yum-nginx-api repo
+    DEPLOY_DIR=/opt/yum-nginx-api
+
 ## API Usage 
 
 **Post binary RPM to API endpoint:**
@@ -71,9 +84,7 @@ It is a deployable solution with Docker or any existing web server with WSGI sup
 **Unsuccessful post:**
 
     {
-      "mime": "inode/x-empty", 
-      "name": "yobot-4.6.2.noarch.rpm", 
-      "size_mb": 0, 
+      "message": "File not RPM", 
       "status": 415
     }
 
@@ -108,10 +119,10 @@ It is a deployable solution with Docker or any existing web server with WSGI sup
 **Successful post:**
 
     {
-      "hostname": "localhost.localdomain",
-      "results": [],
-      "status": "200",
-      "timestamp": 1415729952.407181
+      "cpu_percent": 6,
+      "hostname": "yumnginxapi01",
+      "status": 200,
+      "uptime": "1D:0H:1M:12S"
     }
 
 ## Contributing & Sponsor
@@ -134,5 +145,4 @@ yum-nginx-api project is licensed under [Apache License Version 2.0](http://www.
   [4]: http://gunicorn.org
   [5]: http://supervisord.org
   [6]: https://docker.io
-  [7]: http://marshyski.com/yum-nginx-api.png
-  [8]: http://www.finra.org/web/groups/corporate/@corp/documents/web_asset/p075334.gif
+  [7]: http://www.finra.org/sites/default/files/p075334_0.gif

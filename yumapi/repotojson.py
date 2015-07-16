@@ -1,8 +1,7 @@
-#!/usr/bin/python
 #  (C) Copyright 2014 yum-nginx-api Contributors.
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
-#  You may obtain a copy of the License at 
+#  You may obtain a copy of the License at
 #  http://www.apache.org/licenses/LICENSE-2.0
 #  Unless required by applicable law or agreed to in writing, software
 #  distributed under the License is distributed on an "AS IS" BASIS,
@@ -11,6 +10,9 @@
 #  limitations under the License.
 #  Main contributor is Pierre-Yves Chibon https://github.com/pypingou
 
+from sqlalchemy import Column, ForeignKey, Integer, Text, create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 import pkg_resources
 import contextlib
 import json
@@ -18,12 +20,11 @@ import os
 import shutil
 import sys
 import tempfile
-from sqlalchemy import Column, ForeignKey, Integer, Text, create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-import configuration as config
+import yaml
 
-repo_dir = config.upload_dir
+config_file = os.getcwd() + '/yumapi/config.yaml'
+config_yaml = yaml.load(file(config_file, 'r'))
+upload_dir = config_yaml['upload_dir']
 
 BASE = declarative_base()
 
@@ -93,7 +94,7 @@ def get_pkg_info(session, pkg_name):
 def main():
     working_dir = tempfile.mkdtemp(prefix='repotojson-')
     output = {}
-    dbfiles = find_primary_sqlite(repo_dir)
+    dbfiles = find_primary_sqlite(upload_dir)
     for dbfile_xz in dbfiles:
         cur_fold = os.path.join(*dbfile_xz.rsplit(os.sep, 2)[:-2])
         dbfile = os.path.join(working_dir, 'primary_db_.sqlite')
@@ -118,7 +119,7 @@ def main():
                   'summary': pkg.summary,
                 }
             cnt += 1
-        outputfile = 'repo.json'
+        outputfile = os.getcwd() + '/yumapi/repo.json'
         with open(outputfile, 'w') as stream:
             stream.write(json.dumps(output, sort_keys=True, indent=2, separators=(',', ': ')))
     shutil.rmtree(working_dir)

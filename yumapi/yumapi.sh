@@ -2,7 +2,7 @@
 #  (C) Copyright 2014 yum-nginx-api Contributors.
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
-#  You may obtain a copy of the License at 
+#  You may obtain a copy of the License at
 #  http://www.apache.org/licenses/LICENSE-2.0
 #  Unless required by applicable law or agreed to in writing, software
 #  distributed under the License is distributed on an "AS IS" BASIS,
@@ -11,16 +11,21 @@
 #  limitations under the License.
 
 NAME=yumapi
-FLASKDIR=/opt/yumapi
 USER=root
 GROUP=root
-NUM_WORKERS=2
+WORKERS=2
+DEPLOY_DIR=/opt/yum-nginx-api
 
-cd /opt
+if [[ $1 = "" ]]; then
+   LISTEN_ADDR=127.0.0.1
+else
+   LISTEN_ADDR=0.0.0.0
+fi
+
+cd $DEPLOY_DIR
 
 # Start your unicorn
-gunicorn yumapi:app -b 0.0.0.0:8888 \
+gunicorn $NAME:app -b $LISTEN_ADDR:8888 \
   --name $NAME \
-  --workers $NUM_WORKERS \
-  --user=$USER --group=$GROUP \
-  --log-level=debug
+  --workers $WORKERS \
+  --user=$USER --group=$GROUP

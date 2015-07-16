@@ -131,7 +131,7 @@ More information on how to contribute to this project including sign off and the
 
 FINRA has graciously allocated time for their internal development resources to enhance yum-nginx-api and encourages participation in the open source community. Want to join FINRA? Please visit https://finra.org/careers.
 
-[![FINRA Logo][8]](https://finra.org)
+[![FINRA Logo][7]](https://finra.org)
 
 
 ## License Type

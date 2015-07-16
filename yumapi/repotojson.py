@@ -10,6 +10,9 @@
 #  limitations under the License.
 #  Main contributor is Pierre-Yves Chibon https://github.com/pypingou
 
+from sqlalchemy import Column, ForeignKey, Integer, Text, create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 import pkg_resources
 import contextlib
 import json
@@ -18,9 +21,6 @@ import shutil
 import sys
 import tempfile
 import yaml
-from sqlalchemy import Column, ForeignKey, Integer, Text, create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
 
 config_file = os.getcwd() + '/yumapi/config.yaml'
 config_yaml = yaml.load(file(config_file, 'r'))
@@ -119,7 +119,7 @@ def main():
                   'summary': pkg.summary,
                 }
             cnt += 1
-        outputfile = 'repo.json'
+        outputfile = os.getcwd() + '/yumapi/repo.json'
         with open(outputfile, 'w') as stream:
             stream.write(json.dumps(output, sort_keys=True, indent=2, separators=(',', ': ')))
     shutil.rmtree(working_dir)

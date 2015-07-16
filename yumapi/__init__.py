@@ -22,7 +22,8 @@ import repotojson
 import yaml
 import time
 
-config_yaml = yaml.load(file('config.yaml', 'r'))
+config_file = os.getcwd() + '/yumapi/config.yaml'
+config_yaml = yaml.load(file(config_file, 'r'))
 upload_dir = config_yaml['upload_dir']
 
 ''' Verify upload directory is set in configuration.py '''
@@ -83,17 +84,16 @@ def upload_file():
          call(["createrepo", "-v", "-p", "--update", "--workers", createrepo_workers, upload_dir])
 	     return jsonify(name=filename, size_mb=filesize, mime=file_mime, status=202)
       else:
-	    os.remove(file2)
-	    abort(415)
+	     os.remove(file2)
+	     abort(415)
    else:
-       abort(415)
-       
+      abort(415)
+
 
 @app.route('/api/repo')
 @limiter.limit(request_limit)
 def list_repo():
    """Return json response from sqlite database yum has"""
-   os.remove('repo.json')
    repotojson.main()
    return app.send_static_file('repo.json')
 

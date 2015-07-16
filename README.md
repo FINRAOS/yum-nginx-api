@@ -145,4 +145,4 @@ yum-nginx-api project is licensed under [Apache License Version 2.0](http://www.
   [4]: http://gunicorn.org
   [5]: http://supervisord.org
   [6]: https://docker.io
-  [7]: http://www.finra.org/web/groups/corporate/@corp/documents/web_asset/p075334.gif
+  [7]: http://www.finra.org/sites/default/files/p075334_0.gif

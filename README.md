@@ -24,22 +24,6 @@ It is a deployable solution with Docker or any existing web server with WSGI sup
  5.  [Python Supervisor][5] (Optional)
  6.  [Docker][6] (Optional) 
 
-## Configuration File `config.yaml`
-
-    # createrepo workers, default is 2
-    createrepo_workers:
-    # max content upload, default is 900MB 90 * 1024 * 1024 * 1024
-    max_content_length:
-    # API rate limit, default is 1 per second
-    request_limit:
-    # yum repo directory
-    upload_dir:
-
-## Gunicorn Script `yumapi.sh`
-
-    # Path to yum-nginx-api repo
-    DEPLOY_DIR=/opt/yum-nginx-api
-
 
 ## Pull Docker image from the Docker Registry <a name="install"></a>
     docker pull finraos/yum-nginx-api
@@ -65,6 +49,22 @@ It is a deployable solution with Docker or any existing web server with WSGI sup
     cp -rf yumapi /opt/
     cp -rf nginx/* /etc/nginx/
     supervisord -n -c /etc/supervisord.conf nohup &
+
+## Configuration File `config.yaml`
+
+    # createrepo workers, default is 2
+    createrepo_workers:
+    # max content upload, default is 900MB 90 * 1024 * 1024 * 1024
+    max_content_length:
+    # API rate limit, default is 1 per second
+    request_limit:
+    # yum repo directory
+    upload_dir:
+
+## Gunicorn Script `yumapi.sh`
+
+    # Path to yum-nginx-api repo
+    DEPLOY_DIR=/opt/yum-nginx-api
 
 ## API Usage 
 

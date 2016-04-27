@@ -4,7 +4,7 @@ MAINTAINER Tim Marcinowski <marshyski@gmail.com>
 USER root
 
 RUN yum -y update
-RUN yum install -y python-pip supervisor gcc nginx createrepo python-setuptools
+RUN yum install -y epel-release python-pip supervisor gcc nginx createrepo python-setuptools
 RUN rm -rf /usr/share/nginx
 ADD ./requirements.txt /tmp/requirements.txt
 RUN pip install -r /tmp/requirements.txt

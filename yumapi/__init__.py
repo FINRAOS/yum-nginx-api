@@ -14,6 +14,7 @@ from psutil import cpu_percent, process_iter
 from subprocess import call
 from flask import Flask, request, jsonify, abort
 from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from werkzeug.utils import secure_filename
 from werkzeug.contrib.fixers import ProxyFix
 import os
@@ -42,7 +43,7 @@ else:
     request_limit = '1 per second'
 
 if config_yaml['createrepo_workers']:
-    createrepo_workers = config_yaml['createrepo_workers']
+    createrepo_workers = str(config_yaml['createrepo_workers'])
 else:
     createrepo_workers = '2'
 
@@ -56,7 +57,7 @@ app.config['upload_dir'] = upload_dir
 """900MB default limit set below"""
 app.config['MAX_CONTENT_LENGTH'] = max_content_length
 
-limiter = Limiter(app)
+limiter = Limiter(app, key_func=get_remote_address)
 
 def uptime():
     """Return uptime about nginxify for health check"""
@@ -115,6 +116,10 @@ def method_not_allowed(error):
 @app.errorhandler(415)
 def unsupported_media(error):
    return jsonify(message='File not RPM', status=415), 415
+
+@app.errorhandler(413)
+def payload_too_large(error):
+    return jsonify(message='Exceeds content length', status=413), 413
 
 app.wsgi_app = ProxyFix(app.wsgi_app)
 

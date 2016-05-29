@@ -11,7 +11,7 @@ services:
     network_mode: host
     restart: always
   yumapi:
-    image: yumapi:latest
+    image: finraos/yum-nginx-api:latest
     network_mode: host
     restart: always
     volumes:

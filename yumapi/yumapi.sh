@@ -13,7 +13,7 @@
 NAME=yumapi
 USER=root
 GROUP=root
-WORKERS=2
+WORKERS=`lscpu | grep ^'CPU(s)' | awk '{ print $2 }'`
 DEPLOY_DIR=/opt/yum-nginx-api
 
 if [[ $1 = "" ]]; then

@@ -1,0 +1,22 @@
+version: "2"
+services:
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/mime.types:/etc/nginx/mime.types
+      - /opt/repos:/opt/repos
+    ports:
+      - "80:80"
+    network_mode: host
+    restart: always
+  yumapi:
+    image: finraos/yum-nginx-api:latest
+    network_mode: host
+    restart: always
+    volumes:
+      - /opt/repos:/opt/repos
+    ports:
+      - "8888:8888"
+    depends_on:
+      - nginx

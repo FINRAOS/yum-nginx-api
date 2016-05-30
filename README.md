@@ -15,40 +15,47 @@ It is a deployable solution with Docker or any existing web server with WSGI sup
 
 
 
-**Technologies Needed** [see install](#install) :
+**Requirements**:
 
  1.  Server (Bare-metal/Cloud)
  2.  [NGINX Web Server][2]
  3.  [Python Flask][3] (Optional)
  4.  [Python Gunicorn][4] (Optional)
  5.  [Python Supervisor][5] (Optional)
- 6.  [Docker][6] (Optional) 
+ 6.  [Docker Engine][6] >=1.10 (Optional) 
+ 7.  [Docker Compose][7] >=1.7.1 (Optional)
 
 
-## Pull Docker image from the Docker Registry <a name="install"></a>
+## Pull image from Docker Hub
+
     docker pull finraos/yum-nginx-api
-    docker run -d -p 80:80 finraos/yum-nginx-api
+
+## Run only API
+
+    mkdir -p /opt/repos/pre-release
+    docker run -d -p 8888:8888 -v /opt/repos:/opt/repos finraos/yum-nginx-api
+
+## Run Docker Compose
+	
+	docker-compose up
 
 ## How to build yum-nginx-api (Docker)
 
     git clone https://github.com/FINRAOS/yum-nginx-api.git
-    cd yum-nginx-api && docker build -t finraos/yum-nginx-api .
-    docker run -d -p 80:80 finraos/yum-nginx-api
-    sleep 10 && docker logs `docker ps | grep 'yum-nginx-api' | awk '{ print $1 }' | head -n1` 
+    cd yum-nginx-api && docker build -t finraos/yum-nginx-api . 
 
 ## How to Install yum-nginx-api (Non-Docker)
 
     # Need EPEL repo installed
     git clone https://github.com/FINRAOS/yum-nginx-api.git
-    yum install -y python-pip supervisor gcc nginx createrepo python-setuptools
+    yum install -y python-pip supervisor gcc nginx createrepo python-setuptools python-devel
     cd yum-nginx-api && pip install -r requirements.txt
     mkdir -p /opt/repos/pre-release
     bash scripts/settings.sh
-    cp -f supervisor/supervisord.conf /etc/
-    cp -f supervisor/yumapi.conf /etc/supervisord.d/
-    cp -rf yumapi /opt/
+    cp -f supervisor/yumapi.ini /etc/supervisord.d/
     cp -rf nginx/* /etc/nginx/
-    supervisord -n -c /etc/supervisord.conf nohup &
+    service nginx restart
+    service supervisord restart
 
 ## Configuration File `config.yaml`
 
@@ -144,5 +151,5 @@ yum-nginx-api project is licensed under [Apache License Version 2.0](http://www.
   [3]: http://flask.pocoo.org
   [4]: http://gunicorn.org
   [5]: http://supervisord.org
-  [6]: https://docker.io
-  [7]: http://www.finra.org/sites/default/files/p075334_0.gif
+  [6]: https://docs.docker.com/engine/installation/
+  [7]: https://docs.docker.com/compose/

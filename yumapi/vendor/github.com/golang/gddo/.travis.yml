@@ -1,0 +1,8 @@
+language: go
+go:
+  - 1.8
+script:
+  - pushd talksapp
+  - ./setup.sh
+  - go test -v .
+  - popd

@@ -1,0 +1,24 @@
+BUILT_ON:=$(shell date)
+COMMIT_HASH:=$(shell git log -n 1 --pretty=format:"%H")
+PACKAGES:=$(shell go list ./... | sed -n '1!p' | grep -v /vendor/)
+LDFLAGS:='-X "main.builtOn=$(BUILT_ON)" -X "main.commitHash=$(COMMIT_HASH)"'
+
+default: run
+
+test:
+	echo "mode: count" > coverage-all.out
+	$(foreach pkg,$(PACKAGES), \
+		go test -p=1 -cover -covermode=count -coverprofile=coverage.out ${pkg}; \
+		tail -n +2 coverage.out >> coverage-all.out;)
+
+cover: test
+	go tool cover -html=coverage-all.out
+
+run:
+	go run -ldflags $(LDFLAGS) .
+
+build:
+	go build -ldflags $(LDFLAGS) .
+
+clean:
+	rm -f yumapi yumapi.yaml coverage.out coverage-all.out

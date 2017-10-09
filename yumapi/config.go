@@ -47,6 +47,7 @@ func init() {
 	viper.SetDefault("dev_mode", false)
 }
 
+// Validate configurations and if createrepo binary is present in path
 func configValidate() {
 	createRepo = viper.GetString("createrepo_workers")
 	maxLength = viper.GetInt64("max_content_length")

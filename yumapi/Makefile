@@ -14,11 +14,14 @@ test:
 cover: test
 	go tool cover -html=coverage-all.out
 
-run:
-	go run -ldflags $(LDFLAGS) .
+run: config
+	go run -ldflags $(LDFLAGS) *.go
 
 build:
 	go build -ldflags $(LDFLAGS) .
 
 clean:
 	rm -f yumapi yumapi.yaml coverage.out coverage-all.out
+
+config:
+	printf "upload_dir: .\ndev_mode: true" > yumapi.yaml

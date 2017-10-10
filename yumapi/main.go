@@ -70,8 +70,7 @@ func uploadRoute(c *routing.Context) error {
 	defer f.Close()
 	io.Copy(f, file)
 	buf, _ := ioutil.ReadFile(filePath)
-	_, err = filetype.Match(buf)
-	if err != nil {
+	if kind, err := filetype.Match(buf); err != nil || kind.MIME.Value != "application/x-rpm" {
 		err := os.Remove(filePath)
 		if err != nil {
 			log.Println("Unable to delete " + filePath)

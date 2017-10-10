@@ -15,6 +15,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path"
 
 	"github.com/spf13/viper"
 )
@@ -28,6 +29,8 @@ var (
 	uploadDir  string
 	port       string
 	devMode    bool
+	maxRetries int
+	crCtr      int64
 )
 
 func init() {
@@ -40,20 +43,22 @@ func init() {
 		panic(fmt.Errorf("Fatal error config file: %s \n", err))
 	}
 
-	viper.SetDefault("createrepo_workers", 2)
+	viper.SetDefault("createrepo_workers", 1)
 	viper.SetDefault("max_content_length", 10000000)
-	viper.SetDefault("upload_dir", "./upload/")
+	viper.SetDefault("upload_dir", "./upload")
 	viper.SetDefault("port", 8080)
 	viper.SetDefault("dev_mode", false)
+	viper.SetDefault("max_retries", 3)
 }
 
 // Validate configurations and if createrepo binary is present in path
 func configValidate() {
 	createRepo = viper.GetString("createrepo_workers")
 	maxLength = viper.GetInt64("max_content_length")
-	uploadDir = viper.GetString("upload_dir")
+	uploadDir = path.Clean(viper.GetString("upload_dir")) + "/"
 	port = viper.GetString("port")
 	devMode = viper.GetBool("dev_mode")
+	maxRetries = viper.GetInt("max_retries")
 
 	if viper.GetInt64("createrepo_workers") < 1 {
 		panic(fmt.Errorf("createrepo_workers is less than 1"))
@@ -73,5 +78,8 @@ func configValidate() {
 		if err != nil {
 			panic(fmt.Errorf("createrepo binary not found in path"))
 		}
+	}
+	if maxRetries < 1 {
+		panic(fmt.Errorf("max_retries is less than 1"))
 	}
 }

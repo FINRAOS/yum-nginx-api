@@ -7,12 +7,13 @@ jobs:
     steps:
       - run: git clone https://github.com/FINRAOS/yum-nginx-api.git -b go-rewrite .
       - run:
-          comand: |
+          shell: /bin/sh
+          command: |
             cd yum-nginx-api
             make build
             make docker
       - run:
-          name: Docker push
+          shell: /bin/sh
           command: |
             docker login -u $DOCKER_USER -p $DOCKER_PASS
             docker push finraos/yum-nginx-api:latest

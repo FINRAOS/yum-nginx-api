@@ -7,6 +7,8 @@ yum-nginx-api is a go API for uploading RPMs to yum repositories and also config
 
 It is a deployable solution with Docker or a single 16MB dynamically linked Linux binary. yum-nginx-api enables CI tools to be used for uploading RPMs and managing yum repositories.
 
+Included in this project is a go package `repojson` that can be used to read a repodata directory and return a JSON array of all packages in the primary.sqlite.(bz2|xz).  For usage go to [RepoJSON](#repojson)
+
 **Problems solved with this project**:
 
 1.  Serves updates to Red Hat / CentOS *really fast* and easily scalable.
@@ -88,6 +90,29 @@ It is a deployable solution with Docker or a single 16MB dynamically linked Linu
 **Health check API endpoint**
  
     curl http://localhost/api/health
+
+### RepoJSON
+
+    package main
+
+    import (
+	    "encoding/json"
+	    "fmt"
+
+	    "github.com/FINRAOS/yum-nginx-api/repojson"
+    )
+
+    func main() {
+	    ar, err := repojson.RepoJSON("./")
+	    if err != nil {
+		    fmt.Println(err)
+	    }
+	    js, err := json.Marshal(ar)
+	    if err != nil {
+		    fmt.Println(err)
+	    }
+	    fmt.Println(string(js))
+    }
 
 ## Contributing & Sponsor
 

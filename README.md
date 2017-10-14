@@ -1,6 +1,8 @@
 **[yum-nginx-api][1]**: A frontend API for yum repositories with NGINX
 =======
 
+[![CircleCI](https://circleci.com/gh/FINRAOS/yum-nginx-api/tree/master.svg?style=svg)](https://circleci.com/gh/FINRAOS/yum-nginx-api/tree/master)
+
 yum-nginx-api is an easy frontend API for yum repositories running on the NGINX web server. It rapidly serves updates to Red Hat and CentOS and supports scaling.
 
 It is a deployable solution with Docker or any existing web server with WSGI support. yum-nginx-api enables CI tools to be used for managing and promoting yum repositories.

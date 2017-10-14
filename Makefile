@@ -33,7 +33,7 @@ clean:
 config:
 	printf "upload_dir: .\ndev_mode: true" > yumapi.yaml
 
-docker: cc
+docker:
 	printf "upload_dir: /repo\n" > yumapi.yaml
 	docker build -t finraos/yum-nginx-api:latest .
 

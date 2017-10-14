@@ -113,7 +113,7 @@ func main() {
 		slash.Remover(http.StatusMovedPermanently),
 		content.TypeNegotiator(content.JSON))
 
-	// Disable logging on health and metrics endpoints
+	// Disable logging on health endpoints
 	api.Get("/health", healthRoute)
 	api.Use(access.Logger(log.Printf))
 	api.Post("/upload", uploadRoute)

@@ -102,9 +102,9 @@ func extractBZ2(path, pSqlite string) error {
 	return nil
 }
 
-// repoMarshal connects to uncompressed sqlite file
-// quries database and returns JSON marhsaled byte array
-func repoMarshal(path string) ([]Repo, error) {
+// repoSqlite connects to uncompressed sqlite file
+// quries database and returns array of Repo objects
+func repoSqlite(path string) ([]Repo, error) {
 	var repo []Repo
 	db, err := sql.Open("sqlite3", path+"primary.sqlite")
 	if err != nil {
@@ -129,7 +129,7 @@ func repoMarshal(path string) ([]Repo, error) {
 }
 
 // RepoJSON is main function in repojson package to return
-// JSON Marshal byte array as string
+// array of Repo objects
 func RepoJSON(path string) ([]Repo, error) {
 	var (
 		extract error
@@ -144,7 +144,7 @@ func RepoJSON(path string) ([]Repo, error) {
 			extract = extractBZ2(path, pSqlite)
 		}
 		if extract == nil {
-			j, err := repoMarshal(path)
+			j, err := repoSqlite(path)
 			if err != nil {
 				return nil, extract
 			}

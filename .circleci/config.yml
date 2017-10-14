@@ -6,7 +6,7 @@ jobs:
     working_directory: /go/src/github.com/FINRAOS/yum-nginx-api
     steps:
       - setup_remote_docker
-      - run: git clone https://github.com/FINRAOS/yum-nginx-api.git -b go-rewrite .
+      - run: git clone https://github.com/FINRAOS/yum-nginx-api.git -b $CIRCLE_BRANCH .
       - run:
           shell: /bin/bash
           command: |

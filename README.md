@@ -1,135 +1,117 @@
-**[yum-nginx-api][1]**: A frontend API for yum repositories with NGINX
+**[yum-nginx-api][1]**: A go API for managing yum repos and  NGINX to serve them
 =======
 
-yum-nginx-api is an easy frontend API for yum repositories running on the NGINX web server. It rapidly serves updates to Red Hat and CentOS and supports scaling.
+[![CircleCI](https://circleci.com/gh/FINRAOS/yum-nginx-api/tree/master.svg?style=svg)](https://circleci.com/gh/FINRAOS/yum-nginx-api/tree/master)
 
-It is a deployable solution with Docker or any existing web server with WSGI support. yum-nginx-api enables CI tools to be used for managing and promoting yum repositories.
+yum-nginx-api is a go API for uploading RPMs to yum repositories and also configurations for running NGINX to serve them.
 
+It is a deployable solution with Docker or a single 16MB dynamically linked Linux binary. yum-nginx-api enables CI tools to be used for uploading RPMs and managing yum repositories.
+
+Included in this project is a go package `repojson` that can be used to read a repodata directory and return a JSON array of all packages in the primary.sqlite.(bz2|xz).  For usage go to [RepoJSON](#repojson)
 
 **Problems solved with this project**:
 
 1.  Serves updates to Red Hat / CentOS *really fast* and easily scalable.
 2.  Limited options for a self-service yum repository to engineers via an API.
 3.  Continuous Integration (CI) tools like Jenkins can build, sync, and promote yum repositories with this project unlike Red Hat Satellite Server and Spacewalk.
-4.  Poor documentation on installing a yum repository with NGINX web server.
-
-
+4.  Poor documentation on installing a yum repository with NGINX.
 
 **Requirements**:
 
- 1.  Server (Bare-metal/Cloud)
- 2.  [NGINX Web Server][2]
- 3.  [Python Flask][3] (Optional)
- 4.  [Python Gunicorn][4] (Optional)
- 5.  [Python Supervisor][5] (Optional)
- 6.  [Docker Engine][6] >=1.10 (Optional) 
- 7.  [Docker Compose][7] >=1.7.1 (Optional)
+ 1.  Server (Bare-metal/VM)
+ 2.  [NGINX][2]
+ 3.  [Go][3] >= 1.9.1 (Optional)
+ 4.  [xgo][4] (Optional)
+ 5.  [Docker][5] >=17.09/1.32 (Optional) 
+ 6.  [Docker Compose][6] >=1.16.1 (Optional)
 
-
-## Pull image from Docker Hub
-
-    docker pull finraos/yum-nginx-api
 
 ## Run only API
 
-    mkdir -p /opt/repos/pre-release
-    docker run -d -p 8888:8888 -v /opt/repos:/opt/repos finraos/yum-nginx-api
+    docker run -d -p 8080:8080 --name yumapi finraos/yum-nginx-api
 
 ## Run Docker Compose
 	
 	docker-compose up
 
-## How to build yum-nginx-api (Docker)
+## How to build yum-nginx-api (Go & Docker)
 
+    # This projects needs CGO if not on Linux
     git clone https://github.com/FINRAOS/yum-nginx-api.git
-    cd yum-nginx-api && docker build -t finraos/yum-nginx-api . 
+    cd yum-nginx-api
+    make build # Linux only
+    make cc # OS X only
+    make docker
 
-## How to Install yum-nginx-api (Non-Docker)
+## How to Install yum-nginx-api (Binary)
 
-    # Need EPEL repo installed
-    git clone https://github.com/FINRAOS/yum-nginx-api.git
-    yum install -y python-pip supervisor gcc nginx createrepo python-setuptools python-devel
-    cd yum-nginx-api && pip install -r requirements.txt
-    mkdir -p /opt/repos/pre-release
-    bash scripts/settings.sh
-    cp -f supervisor/yumapi.ini /etc/supervisord.d/
-    cp -rf nginx/* /etc/nginx/
-    service nginx restart
-    service supervisord restart
+    make build # Linux only
+    make cc # OS X only
 
-## Configuration File `config.yaml`
+## Configuration File `yumapi.yaml`
+
+**Configuration file can be JSON, TOML, YAML, HCL, or Java properties**
 
     # createrepo workers, default is 2
     createrepo_workers:
-    # max content upload, default is 900MB 90 * 1024 * 1024 * 1024
+    # http max content upload, default is 10000000 <- 10MB
     max_content_length:
-    # API rate limit, default is 1 per second
-    request_limit:
-    # yum repo directory
+    # yum repo directory, default is ./
     upload_dir:
-
-## Gunicorn Script `yumapi.sh`
-
-    # Path to yum-nginx-api repo
-    DEPLOY_DIR=/opt/yum-nginx-api
+    # port to run http server, default is 8080
+    port:
+    # max retries to retry failed createrepo, default is 3
+    max_retries:
 
 ## API Usage 
 
 **Post binary RPM to API endpoint:**
 
-    curl -F file=@yobot-4.6.2.noarch.rpm http://localhost/api/upload
-
-**Successful post:**
-
-    {
-      "mime": "application/x-rpm", 
-      "name": "yobot-4.6.2.noarch.rpm", 
-      "size_mb": 294, 
-      "status": 202
-    }
-
-**Unsuccessful post:**
-
-    {
-      "message": "File not RPM", 
-      "status": 415
-    }
+    curl -F file=@yobot-4.6.2.noarch.rpm http://localhost:8080/api/upload
 
 **List repo contents package name, arch, version and summary:**
 
-    curl http://localhost/api/repo
+    curl http://localhost:8080/api/repo
 
 **Successful post:**
 
-    {
-      "ami-buildr": {
-        "arch": [
-         "x86_64",
-         "i686"
-        ],
-        "summary": "AMI Buildr for RHEL 6",
-        "version": "2.0"
-      },
-      "epel-release": {
-        "arch": [
-         "noarch"
-        ],
-        "summary": "Extra Packages for Enterprise Linux repository configuration",
-        "version": "6"
-      }
-    }
+    [{
+        "name": "yobot",
+        "arch": "x86_64",
+        "version": "4.6.2",
+        "summary": "Shenandoah RPM"
+    },{
+        "name": "yum-nginx-api-test",
+        "arch": "x86_64",
+        "version": "0.1",
+        "summary": "Yum NGINX API Test RPM"
+    }]
  
 **Health check API endpoint**
  
     curl http://localhost/api/health
 
-**Successful post:**
+## RepoJSON
 
-    {
-      "cpu_percent": 6,
-      "hostname": "yumnginxapi01",
-      "status": 200,
-      "uptime": "1D:0H:1M:12S"
+    package main
+
+    import (
+	    "encoding/json"
+	    "fmt"
+
+	    "github.com/FINRAOS/yum-nginx-api/repojson"
+    )
+
+    func main() {
+	    ar, err := repojson.RepoJSON("./")
+	    if err != nil {
+		    fmt.Println(err)
+	    }
+	    js, err := json.Marshal(ar)
+	    if err != nil {
+		    fmt.Println(err)
+	    }
+	    fmt.Println(string(js))
     }
 
 ## Contributing & Sponsor
@@ -140,16 +122,13 @@ FINRA has graciously allocated time for their internal development resources to 
 
 [FINRA Technology](http://technology.finra.org/)
 
-
 ## License Type
 
 yum-nginx-api project is licensed under [Apache License Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
-
-  [1]: http://github.com/finraos/yum-nginx-api/wiki
-  [2]: http://nginx.org
-  [3]: http://flask.pocoo.org
-  [4]: http://gunicorn.org
-  [5]: http://supervisord.org
-  [6]: https://docs.docker.com/engine/installation/
-  [7]: https://docs.docker.com/compose/
+  [1]: https://github.com/finraos/yum-nginx-api/wiki
+  [2]: https://nginx.org
+  [3]: https://golang.org
+  [4]: https://github.com/karalabe/xgo
+  [5]: https://docs.docker.com/engine/installation/
+  [6]: https://docs.docker.com/compose/install/

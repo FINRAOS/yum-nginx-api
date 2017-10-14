@@ -1,4 +1,0 @@
-createrepo_workers:
-max_content_length:
-request_limit:
-upload_dir: /opt/repos/pre-release

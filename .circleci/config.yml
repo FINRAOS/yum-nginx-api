@@ -3,7 +3,7 @@ jobs:
   build:
     docker:
       - image: circleci/golang:1.9.1
-    working_directory: /go/src/github.com/FINRAOS
+    working_directory: /go/src/github.com/FINRAOS/yum-nginx-api
     steps:
       - run: git clone https://github.com/FINRAOS/yum-nginx-api.git -b go-rewrite .
       - run:

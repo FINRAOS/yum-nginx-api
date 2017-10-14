@@ -14,12 +14,12 @@ Included in this project is a go package `repojson` that can be used to read a r
 1.  Serves updates to Red Hat / CentOS *really fast* and easily scalable.
 2.  Limited options for a self-service yum repository to engineers via an API.
 3.  Continuous Integration (CI) tools like Jenkins can build, sync, and promote yum repositories with this project unlike Red Hat Satellite Server and Spacewalk.
-4.  Poor documentation on installing a yum repository with NGINX web server.
+4.  Poor documentation on installing a yum repository with NGINX.
 
 **Requirements**:
 
  1.  Server (Bare-metal/VM)
- 2.  [NGINX Web Server][2]
+ 2.  [NGINX][2]
  3.  [Go][3] >= 1.9.1 (Optional)
  4.  [xgo][4] (Optional)
  5.  [Docker][5] >=17.09/1.32 (Optional) 
@@ -122,11 +122,9 @@ FINRA has graciously allocated time for their internal development resources to 
 
 [FINRA Technology](http://technology.finra.org/)
 
-
 ## License Type
 
 yum-nginx-api project is licensed under [Apache License Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
-
 
   [1]: https://github.com/finraos/yum-nginx-api/wiki
   [2]: https://nginx.org

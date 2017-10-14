@@ -48,7 +48,7 @@ func init() {
 
 	viper.SetDefault("createrepo_workers", 1)
 	viper.SetDefault("max_content_length", 10000000)
-	viper.SetDefault("upload_dir", "./upload")
+	viper.SetDefault("upload_dir", "./")
 	viper.SetDefault("port", 8080)
 	viper.SetDefault("dev_mode", false)
 	viper.SetDefault("max_retries", 3)

@@ -91,7 +91,7 @@ Included in this project is a go package `repojson` that can be used to read a r
  
     curl http://localhost/api/health
 
-### RepoJSON
+## RepoJSON
 
     package main
 

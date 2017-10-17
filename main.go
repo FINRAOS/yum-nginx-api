@@ -61,7 +61,7 @@ func uploadRoute(c *routing.Context) error {
 	file, handler, err := c.Request.FormFile("file")
 	if err != nil {
 		c.Response.WriteHeader(http.StatusInternalServerError)
-		c.Write("Upload Failed")
+		c.Write("Upload Failed " + err.Error())
 		return err
 	}
 	defer file.Close()
@@ -69,7 +69,7 @@ func uploadRoute(c *routing.Context) error {
 	f, err := os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE, 0644)
 	if err != nil {
 		c.Response.WriteHeader(http.StatusInternalServerError)
-		c.Write("Upload Failed")
+		c.Write("Upload Failed " + err.Error())
 		return err
 	}
 	defer f.Close()
@@ -104,7 +104,9 @@ func repoRoute(c *routing.Context) error {
 }
 
 func main() {
-	configValidate()
+	if err := configValidate(); err != nil {
+		log.Fatalln(err.Error())
+	}
 	go crRoutine()
 	rtr := routing.New()
 

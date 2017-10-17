@@ -4,9 +4,17 @@ jobs:
     docker:
       - image: circleci/golang:1.9.1
     working_directory: /go/src/github.com/FINRAOS/yum-nginx-api
+    environment:
+      TEST_RESULTS: /tmp/test-results
     steps:
       - setup_remote_docker
       - run: git clone https://github.com/FINRAOS/yum-nginx-api.git -b $CIRCLE_BRANCH .
+      - run:
+          shell: /bin/bash
+          command: |
+            mkdir -p $TEST_RESULTS
+            go get github.com/jstemmer/go-junit-report
+            make test | go-junit-report > ${TEST_RESULTS}/go-test-report.xml
       - run:
           shell: /bin/bash
           command: |
@@ -18,3 +26,5 @@ jobs:
           command: |
             docker login -u $DOCKER_USER -p $DOCKER_PASS
             docker push finraos/yum-nginx-api:latest
+      - store_test_results:
+          path: /tmp/test-results

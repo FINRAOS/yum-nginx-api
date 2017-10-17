@@ -1,22 +1,16 @@
 PACKAGE_NAME:='yumapi'
 BUILT_ON:=$(shell date)
 COMMIT_HASH:=$(shell git log -n 1 --pretty=format:"%H")
-PACKAGES:=$(shell go list ./... | sed -n '1!p' | grep -v /vendor/)
+PACKAGES:=$(shell go list ./... | grep -v /vendor/)
 LDFLAGS:='-X "main.builtOn=$(BUILT_ON)" -X "main.commitHash=$(COMMIT_HASH)"'
 
 default: docker
 
 test:
-	echo "mode: count" > coverage-all.out
-	$(foreach pkg,$(PACKAGES), \
-		go test -p=1 -cover -covermode=count -coverprofile=coverage.out ${pkg}; \
-		tail -n +2 coverage.out >> coverage-all.out;)
-
-cover: test
-	go tool cover -html=coverage-all.out
+	go test -cover -v $(PACKAGES)
 
 run: config
-	go run -ldflags $(LDFLAGS) *.go
+	go run -ldflags $(LDFLAGS) `find . | grep -v 'test\|vendor\|repo' | grep \.go`
 
 # Cross-compile from OS X to Linux using xgo
 cc:

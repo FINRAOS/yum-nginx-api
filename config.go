@@ -12,12 +12,20 @@
 package main
 
 import (
-	"fmt"
+	"errors"
 	"os"
 	"path"
 
 	"github.com/FINRAOS/yum-nginx-api/repojson"
 	"github.com/spf13/viper"
+)
+
+const (
+	crError = "config: createrepo_workers is less than 1"
+	mlError = "config: max_content_length is less than 1MB"
+	upError = "config: upload_directory does not exist"
+	ptError = "config: port is not above port 80"
+	mxError = "config: max_retries is less than 1"
 )
 
 // Some vars are used with different types in handlers vs validation
@@ -36,14 +44,15 @@ var (
 	crBin      string
 )
 
-func init() {
+// Validate configurations and if createrepo binary is present in path
+func configValidate() error {
 	viper.SetConfigName("yumapi")
 	viper.AddConfigPath("/opt/yum-nginx-api/yumapi/")
 	viper.AddConfigPath("/etc/yumapi/")
 	viper.AddConfigPath(".")
 	err := viper.ReadInConfig()
 	if err != nil {
-		panic(fmt.Errorf("Fatal error config file: %s \n", err))
+		return errors.New("Fatal error config file: " + err.Error())
 	}
 
 	viper.SetDefault("createrepo_workers", 1)
@@ -52,10 +61,7 @@ func init() {
 	viper.SetDefault("port", 8080)
 	viper.SetDefault("dev_mode", false)
 	viper.SetDefault("max_retries", 3)
-}
 
-// Validate configurations and if createrepo binary is present in path
-func configValidate() {
 	createRepo = viper.GetString("createrepo_workers")
 	maxLength = viper.GetInt64("max_content_length")
 	uploadDir = path.Clean(viper.GetString("upload_dir")) + "/"
@@ -64,16 +70,19 @@ func configValidate() {
 	maxRetries = viper.GetInt("max_retries")
 
 	if viper.GetInt64("createrepo_workers") < 1 {
-		panic(fmt.Errorf("createrepo_workers is less than 1"))
+		return errors.New(crError)
 	}
 	if maxLength < 1000000 {
-		panic(fmt.Errorf("max_content_length is less than 1MB"))
+		return errors.New(mlError)
 	}
 	if _, err := os.Stat(uploadDir); os.IsNotExist(err) {
-		panic(fmt.Errorf("upload_directory %s does not exist", uploadDir))
+		return errors.New(upError)
 	}
 	if viper.GetInt64("port") < 80 {
-		panic(fmt.Errorf("port is not above port 80"))
+		return errors.New(ptError)
+	}
+	if maxRetries < 1 {
+		return errors.New(mxError)
 	}
 	if !devMode {
 		for _, cr := range crPaths {
@@ -83,10 +92,8 @@ func configValidate() {
 			}
 		}
 		if crBin == "" {
-			panic(fmt.Errorf("createrepo binary not found in path"))
+			return errors.New(crError)
 		}
 	}
-	if maxRetries < 1 {
-		panic(fmt.Errorf("max_retries is less than 1"))
-	}
+	return nil
 }

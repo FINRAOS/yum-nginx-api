@@ -1,4 +1,4 @@
-![yum-nginx-api](/img/logo.png)
+<img src="/img/logo.png" alt="drawing" width="520px"/>
 
 A GO API for managing yum repos and  NGINX to serve them
 =======

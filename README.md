@@ -1,4 +1,6 @@
-**[yum-nginx-api][1]**: A go API for managing yum repos and  NGINX to serve them
+![yum-nginx-api](/img/logo.png)
+
+A go API for managing yum repos and  NGINX to serve them
 =======
 
 [![CircleCI](https://circleci.com/gh/FINRAOS/yum-nginx-api/tree/master.svg?style=svg)](https://circleci.com/gh/FINRAOS/yum-nginx-api/tree/master)

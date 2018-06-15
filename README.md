@@ -1,11 +1,11 @@
 ![yum-nginx-api](/img/logo.png)
 
-A go API for managing yum repos and  NGINX to serve them
+A GO API for managing yum repos and  NGINX to serve them
 =======
 
 [![CircleCI](https://circleci.com/gh/FINRAOS/yum-nginx-api/tree/master.svg?style=svg)](https://circleci.com/gh/FINRAOS/yum-nginx-api/tree/master)
 
-yum-nginx-api is a go API for uploading RPMs to yum repositories and also configurations for running NGINX to serve them.
+[yum-nginx-api][1] is a go API for uploading RPMs to yum repositories and also configurations for running NGINX to serve them.
 
 It is a deployable solution with Docker or a single 16MB dynamically linked Linux binary. yum-nginx-api enables CI tools to be used for uploading RPMs and managing yum repositories.
 

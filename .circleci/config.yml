@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/golang:1.9.1
+      - image: circleci/golang:1.10.3
     working_directory: /go/src/github.com/FINRAOS/yum-nginx-api
     environment:
       TEST_RESULTS: /tmp/test-results

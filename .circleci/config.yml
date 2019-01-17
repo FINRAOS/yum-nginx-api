@@ -18,7 +18,6 @@ jobs:
       - run:
           shell: /bin/bash
           command: |
-            cd yum-nginx-api
             make build
             make docker
       - run:

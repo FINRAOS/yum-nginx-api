@@ -135,7 +135,10 @@ func RepoJSON(path string) ([]Repo, error) {
 		extract error
 		pSqlite string
 	)
-	filepath.Walk(path, setPsqlite(&pSqlite))
+	err := filepath.Walk(path, setPsqlite(&pSqlite))
+	if err != nil {
+		return nil, err
+	}
 	if pSqlite != "" {
 		switch filepath.Ext(pSqlite) {
 		case ".xz":

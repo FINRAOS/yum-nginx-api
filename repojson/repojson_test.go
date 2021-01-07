@@ -13,7 +13,10 @@ const jstring = `[{"name":"yum-nginx-api-test","arch":"x86_64","version":"0.1","
 // TestSetPsqlite finds primary.sqlite archive in current directory
 func TestSetPsqlite(t *testing.T) {
 	var pSqlite string
-	filepath.Walk("./", setPsqlite(&pSqlite))
+	err := filepath.Walk("./", setPsqlite(&pSqlite))
+	if err != nil {
+		t.Fatalf(err.Error())
+	}
 	if pSqlite == "" {
 		t.Fatalf("Expected to match file")
 	}
@@ -27,7 +30,10 @@ func TestRegExSetPsqlite(t *testing.T) {
 		os.Remove("/tmp/primary.sqlitexz")
 		t.Fatalf("Error writing file")
 	}
-	filepath.Walk("/tmp", setPsqlite(&pSqlite))
+	err := filepath.Walk("/tmp", setPsqlite(&pSqlite))
+	if err != nil {
+		t.Fatalf(err.Error())
+	}
 	if pSqlite != "" {
 		os.Remove("/tmp/primary.sqlitexz")
 		t.Fatalf("Expected to not match file got " + pSqlite)
@@ -38,7 +44,10 @@ func TestRegExSetPsqlite(t *testing.T) {
 		os.Remove("/tmp/primary.sqlite.xzz")
 		t.Fatalf("Error writing file")
 	}
-	filepath.Walk("/tmp", setPsqlite(&pSqlite))
+	err = filepath.Walk("/tmp", setPsqlite(&pSqlite))
+	if err != nil {
+		t.Fatalf(err.Error())
+	}
 	if pSqlite != "" {
 		os.Remove("/tmp/primary.sqlite.xzz")
 		t.Fatalf("Expected to not match file got " + pSqlite)
@@ -49,7 +58,10 @@ func TestRegExSetPsqlite(t *testing.T) {
 		os.Remove("/tmp/primary.sqlite.bz")
 		t.Fatalf("Error writing file")
 	}
-	filepath.Walk("/tmp", setPsqlite(&pSqlite))
+	err = filepath.Walk("/tmp", setPsqlite(&pSqlite))
+	if err != nil {
+		t.Fatalf(err.Error())
+	}
 	if pSqlite != "" {
 		os.Remove("/tmp/primary.sqlite.bz")
 		t.Fatalf("Expected to not match file got " + pSqlite)

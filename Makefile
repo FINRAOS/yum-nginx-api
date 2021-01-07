@@ -30,7 +30,7 @@ cc:
 
 # Build on Linux
 build:
-	CGO_ENABLED="1" go build -ldflags $(LDFLAGS) -o $(PACKAGE_NAME) .
+	CGO_ENABLED=0 go build -ldflags $(LDFLAGS) -a -o $(PACKAGE_NAME) .
 
 clean:
 	rm -rf yumapi* coverage.out coverage-all.out repodata *.rpm *.sqlite

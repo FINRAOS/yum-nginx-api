@@ -21,7 +21,7 @@ import (
 	"time"
 
 	"github.com/FINRAOS/yum-nginx-api/repojson"
-	"github.com/go-ozzo/ozzo-routing"
+	routing "github.com/go-ozzo/ozzo-routing"
 	"github.com/go-ozzo/ozzo-routing/access"
 	"github.com/go-ozzo/ozzo-routing/content"
 	"github.com/go-ozzo/ozzo-routing/fault"
@@ -57,11 +57,16 @@ func crRoutine() {
 
 // uploadRoute function for handler /upload
 func uploadRoute(c *routing.Context) error {
-	c.Request.ParseMultipartForm(maxLength)
+	err := c.Request.ParseMultipartForm(maxLength)
+	if err != nil {
+		c.Response.WriteHeader(http.StatusInternalServerError)
+		_ = c.Write("Upload Failed " + err.Error())
+		return err
+	}
 	file, handler, err := c.Request.FormFile("file")
 	if err != nil {
 		c.Response.WriteHeader(http.StatusInternalServerError)
-		c.Write("Upload Failed " + err.Error())
+		_ = c.Write("Upload Failed " + err.Error())
 		return err
 	}
 	defer file.Close()
@@ -69,11 +74,16 @@ func uploadRoute(c *routing.Context) error {
 	f, err := os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE, 0644)
 	if err != nil {
 		c.Response.WriteHeader(http.StatusInternalServerError)
-		c.Write("Upload Failed " + err.Error())
+		_ = c.Write("Upload Failed " + err.Error())
 		return err
 	}
 	defer f.Close()
-	io.Copy(f, file)
+	_, err = io.Copy(f, file)
+	if err != nil {
+		c.Response.WriteHeader(http.StatusInternalServerError)
+		_ = c.Write("Upload Failed " + err.Error())
+		return err
+	}
 	buf, _ := ioutil.ReadFile(filePath)
 	if kind, err := filetype.Match(buf); err != nil || kind.MIME.Value != "application/x-rpm" {
 		err := os.Remove(filePath)
@@ -123,5 +133,8 @@ func main() {
 
 	http.Handle("/", rtr)
 	log.Printf("yumapi built-on %s, version %s started on %s \n", builtOn, commitHash, port)
-	http.ListenAndServe(":"+port, nil)
+	err := http.ListenAndServe(":"+port, nil)
+	if err != nil {
+		log.Panicln(err)
+	}
 }

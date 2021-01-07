@@ -3,11 +3,11 @@
 A GO API for managing yum repos and  NGINX to serve them
 =======
 
-[![CircleCI](https://circleci.com/gh/FINRAOS/yum-nginx-api/tree/master.svg?style=svg)](https://circleci.com/gh/FINRAOS/yum-nginx-api/tree/master)
+[![CircleCI](https://circleci.com/gh/FINRAOS/yum-nginx-api/tree/master.svg?style=svg)](https://circleci.com/gh/FINRAOS/yum-nginx-api/tree/master) [![Go Report Card](https://goreportcard.com/badge/github.com/FINRAOS/yum-nginx-api)](https://goreportcard.com/report/github.com/FINRAOS/yum-nginx-api)
 
 [yum-nginx-api][1] is a go API for uploading RPMs to yum repositories and also configurations for running NGINX to serve them.
 
-It is a deployable solution with Docker or a single 16MB dynamically linked Linux binary. yum-nginx-api enables CI tools to be used for uploading RPMs and managing yum repositories.
+It is a deployable solution with Docker or a single 8MB statically linked Linux binary. yum-nginx-api enables CI tools to be used for uploading RPMs and managing yum repositories.
 
 Included in this project is a go package `repojson` that can be used to read a repodata directory and return a JSON array of all packages in the primary.sqlite.(bz2|xz).  For usage go to [RepoJSON](#repojson)
 

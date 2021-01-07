@@ -2,12 +2,23 @@ PACKAGE_NAME:='yumapi'
 BUILT_ON:=$(shell date)
 COMMIT_HASH:=$(shell git log -n 1 --pretty=format:"%H")
 PACKAGES:=$(shell go list ./... | grep -v /vendor/)
-LDFLAGS:='-X "main.builtOn=$(BUILT_ON)" -X "main.commitHash=$(COMMIT_HASH)"'
+LDFLAGS:='-s -w -X "main.builtOn=$(BUILT_ON)" -X "main.commitHash=$(COMMIT_HASH)"'
 
 default: docker
 
 test:
 	go test -cover -v $(PACKAGES)
+
+update-deps:
+	go get -u ./...
+	go mod tidy
+
+gofmt:
+	go fmt ./...
+
+lint: gofmt
+	$(GOPATH)/bin/golint $(PACKAGES)
+	$(GOPATH)/bin/golangci-lint run
 
 run: config
 	go run -ldflags $(LDFLAGS) `find . | grep -v 'test\|vendor\|repo' | grep \.go`
@@ -19,7 +30,7 @@ cc:
 
 # Build on Linux
 build:
-	CGO_ENABLED="1" go build -ldflags $(LDFLAGS) -o $(PACKAGE_NAME) .
+	CGO_ENABLED=0 go build -ldflags $(LDFLAGS) -a -o $(PACKAGE_NAME) .
 
 clean:
 	rm -rf yumapi* coverage.out coverage-all.out repodata *.rpm *.sqlite

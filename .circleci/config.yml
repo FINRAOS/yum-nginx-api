@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/golang:1.11.4
+      - image: circleci/golang:latest
     working_directory: /go/src/github.com/FINRAOS/yum-nginx-api
     environment:
       TEST_RESULTS: /tmp/test-results
@@ -13,7 +13,10 @@ jobs:
           shell: /bin/bash
           command: |
             mkdir -p $TEST_RESULTS
+            curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.34.1
+            go get -u golang.org/x/lint/golint
             go get github.com/jstemmer/go-junit-report
+            make lint
             make test | go-junit-report > ${TEST_RESULTS}/go-test-report.xml
       - run:
           shell: /bin/bash

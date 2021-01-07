@@ -3,7 +3,7 @@
 A GO API for managing yum repos and  NGINX to serve them
 =======
 
-[![CircleCI](https://circleci.com/gh/FINRAOS/yum-nginx-api/tree/master.svg?style=svg)](https://circleci.com/gh/FINRAOS/yum-nginx-api/tree/master)
+[![CircleCI](https://circleci.com/gh/FINRAOS/yum-nginx-api/tree/master.svg?style=svg)](https://circleci.com/gh/FINRAOS/yum-nginx-api/tree/master) [![Go Report Card](https://goreportcard.com/badge/github.com/FINRAOS/yum-nginx-api)](https://goreportcard.com/report/github.com/FINRAOS/yum-nginx-api)
 
 [yum-nginx-api][1] is a go API for uploading RPMs to yum repositories and also configurations for running NGINX to serve them.
 
